@@ -36,10 +36,11 @@ namespace exchange_rates_backend.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UserResponseDto>> PostUserEntity([FromBody] UserCredentialsDto userCredentials)
+        public async Task<ActionResult<UserResponseDto>> PostUserEntity(
+            [FromBody] UserCredentialsDto userCredentialsDto)
         {
             var createdUserEntity = await _usersService.Add(new UserEntity()
-                { Email = userCredentials.Email, Password = userCredentials.Password });
+                { Email = userCredentialsDto.Email, Password = userCredentialsDto.Password });
             if (createdUserEntity is null)
             {
                 return BadRequest();

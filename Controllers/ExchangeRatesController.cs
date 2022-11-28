@@ -1,6 +1,7 @@
 using System.Web;
 using exchange_rates_backend.Models;
 using exchange_rates_backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace exchange_rates_backend.Controllers;
@@ -18,6 +19,7 @@ public class ExchangeRatesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IEnumerable<ValuteEntity>> GetByDate(string? date)
     {
         if (date is null)
