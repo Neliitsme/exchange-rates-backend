@@ -27,7 +27,6 @@ public class ExchangeRatesController : ControllerBase
 
         var decodedDate = HttpUtility.UrlDecode(date);
         var parsedDate = DateOnly.Parse(decodedDate);
-        var formattedDateString = $"{parsedDate.Day}/{parsedDate.Month}/{parsedDate.Year}";
-        return await _exchangeRatesService.FetchAndParse(formattedDateString);
+        return await _exchangeRatesService.FetchAndParse(parsedDate.ToString());
     }
 }
