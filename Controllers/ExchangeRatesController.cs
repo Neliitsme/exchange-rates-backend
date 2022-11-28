@@ -20,15 +20,25 @@ public class ExchangeRatesController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<IEnumerable<ValuteEntity>> GetByDate(string? date)
+    public async Task<ActionResult<IEnumerable<ValuteEntity>>> GetByDate(string? date)
     {
+        IEnumerable<ValuteEntity> valutes;
         if (date is null)
         {
-            return await _exchangeRatesService.FetchAndParse();
+            valutes = await _exchangeRatesService.FetchAndParse();
+        }
+        else
+        {
+            var decodedDate = HttpUtility.UrlDecode(date);
+            var parsedDate = DateOnly.Parse(decodedDate);
+            valutes = await _exchangeRatesService.FetchAndParse(parsedDate.ToString());
         }
 
-        var decodedDate = HttpUtility.UrlDecode(date);
-        var parsedDate = DateOnly.Parse(decodedDate);
-        return await _exchangeRatesService.FetchAndParse(parsedDate.ToString());
+        if (!valutes.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(valutes);
     }
 }
